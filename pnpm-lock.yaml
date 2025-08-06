@@ -20,6 +20,9 @@ importers:
       '@payloadcms/payload-cloud':
         specifier: 3.50.0
         version: 3.50.0(payload@3.50.0(graphql@16.11.0)(typescript@5.7.3))
+      '@payloadcms/plugin-form-builder':
+        specifier: ^3.50.0
+        version: 3.50.0(@types/react@19.1.8)(monaco-editor@0.52.2)(next@15.4.4(@playwright/test@1.54.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(payload@3.50.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.7.3)
       '@payloadcms/plugin-seo':
         specifier: ^3.50.0
         version: 3.50.0(@types/react@19.1.8)(monaco-editor@0.52.2)(next@15.4.4(@playwright/test@1.54.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(payload@3.50.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.7.3)
@@ -1345,6 +1348,13 @@ packages:
     resolution: {integrity: sha512-wH8/kOYA/m5zXVJG5PQdxUNao3fb15aVRQUJbNfF8o6VBAZNXXCm9LJghUjcpyo5NGQai5Kjodycx/y+1PqrjA==}
     peerDependencies:
       payload: 3.50.0
+
+  '@payloadcms/plugin-form-builder@3.50.0':
+    resolution: {integrity: sha512-DUrXIX+XAcrZi4kSm23KRnDWHLiQAcY2z/FUFs+HRQQoalAjH7iErOjH6b1uwZTEnCIPWkMiqvaGoE5Z7we5LQ==}
+    peerDependencies:
+      payload: 3.50.0
+      react: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
+      react-dom: ^19.0.0 || ^19.0.0-rc-65a56d0e-20241020
 
   '@payloadcms/plugin-seo@3.50.0':
     resolution: {integrity: sha512-fwAd7yrC486o4RKYUfU8EyX40F1CEaRWSQsdsQxRdSmGj+vdypsD0QI8Gw0QXUAqzy/yX5CjGxIkgfq9skcs3A==}
@@ -4616,6 +4626,20 @@ snapshots:
     transitivePeerDependencies:
       - aws-crt
       - encoding
+
+  '@payloadcms/plugin-form-builder@3.50.0(@types/react@19.1.8)(monaco-editor@0.52.2)(next@15.4.4(@playwright/test@1.54.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(payload@3.50.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.7.3)':
+    dependencies:
+      '@payloadcms/ui': 3.50.0(@types/react@19.1.8)(monaco-editor@0.52.2)(next@15.4.4(@playwright/test@1.54.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(payload@3.50.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.7.3)
+      escape-html: 1.0.3
+      payload: 3.50.0(graphql@16.11.0)(typescript@5.7.3)
+      react: 19.1.1
+      react-dom: 19.1.1(react@19.1.1)
+    transitivePeerDependencies:
+      - '@types/react'
+      - monaco-editor
+      - next
+      - supports-color
+      - typescript
 
   '@payloadcms/plugin-seo@3.50.0(@types/react@19.1.8)(monaco-editor@0.52.2)(next@15.4.4(@playwright/test@1.54.1)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(sass@1.77.4))(payload@3.50.0(graphql@16.11.0)(typescript@5.7.3))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(typescript@5.7.3)':
     dependencies:

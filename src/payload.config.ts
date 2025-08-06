@@ -6,6 +6,7 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { getEmailAdapter } from './app/(payload)/emails/email'
 import { emailService } from './app/(payload)/emails/emailService'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
+import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
@@ -93,6 +94,22 @@ export default buildConfig({
         return doc?.excerpt || doc?.description || 'Default site description'
       },
       tabbedUI: true,
+    }),
+    formBuilderPlugin({
+      fields: {
+        text: true,
+        textarea: true,
+        select: true,
+        email: true,
+        state: true,
+        country: true,
+        checkbox: true,
+        number: true,
+        message: true,
+        date: true,
+        payment: false, // Disable payment field for now
+      },
+      redirectRelationships: ['pages'], // Allow redirecting to pages after form submission
     }),
     // storage-adapter-placeholder
   ],
