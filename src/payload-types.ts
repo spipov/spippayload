@@ -69,7 +69,7 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
-    posts: Post;
+    roles: Role;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -78,7 +78,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
-    posts: PostsSelect<false> | PostsSelect<true>;
+    roles: RolesSelect<false> | RolesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -123,6 +123,14 @@ export interface User {
   id: number;
   name?: string | null;
   /**
+   * User role determines permissions
+   */
+  role: 'admin' | 'editor' | 'author' | 'subscriber' | 'custom';
+  /**
+   * Custom role with specific permissions
+   */
+  customRole?: (number | null) | Role;
+  /**
    * User's preferred language for the admin interface
    */
   preferredLocale?: ('en' | 'es' | 'fr' | 'de' | 'ar') | null;
@@ -146,6 +154,41 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "roles".
+ */
+export interface Role {
+  id: number;
+  /**
+   * Role name (e.g., admin, editor, author, subscriber)
+   */
+  name: string;
+  /**
+   * Brief description of what this role can do
+   */
+  description?: string | null;
+  permissions?: {
+    /**
+     * Can access the admin panel
+     */
+    canAccessAdmin?: boolean | null;
+    /**
+     * Can create, edit, and delete users
+     */
+    canManageUsers?: boolean | null;
+    /**
+     * Can create, edit, and delete roles
+     */
+    canManageRoles?: boolean | null;
+    /**
+     * Can upload and manage media files
+     */
+    canManageMedia?: boolean | null;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
@@ -166,54 +209,6 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts".
- */
-export interface Post {
-  id: number;
-  title: string;
-  /**
-   * URL-friendly version of the title
-   */
-  slug: string;
-  content?: {
-    root: {
-      type: string;
-      children: {
-        type: string;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  /**
-   * Brief description of the post
-   */
-  excerpt?: string | null;
-  status?: ('draft' | 'published') | null;
-  publishedAt?: string | null;
-  author?: (number | null) | User;
-  featuredImage?: (number | null) | Media;
-  tags?:
-    | {
-        tag?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  seo?: {
-    title?: string | null;
-    description?: string | null;
-    keywords?: string | null;
-  };
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -228,8 +223,8 @@ export interface PayloadLockedDocument {
         value: number | Media;
       } | null)
     | ({
-        relationTo: 'posts';
-        value: number | Post;
+        relationTo: 'roles';
+        value: number | Role;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -279,6 +274,8 @@ export interface PayloadMigration {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  role?: T;
+  customRole?: T;
   preferredLocale?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -318,29 +315,18 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "posts_select".
+ * via the `definition` "roles_select".
  */
-export interface PostsSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  content?: T;
-  excerpt?: T;
-  status?: T;
-  publishedAt?: T;
-  author?: T;
-  featuredImage?: T;
-  tags?:
+export interface RolesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  permissions?:
     | T
     | {
-        tag?: T;
-        id?: T;
-      };
-  seo?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        keywords?: T;
+        canAccessAdmin?: T;
+        canManageUsers?: T;
+        canManageRoles?: T;
+        canManageMedia?: T;
       };
   updatedAt?: T;
   createdAt?: T;

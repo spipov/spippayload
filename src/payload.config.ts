@@ -6,16 +6,17 @@ import { postgresAdapter } from '@payloadcms/db-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
-import sharp from 'sharp'
+import { ar } from 'payload/i18n/ar'
+import { de } from 'payload/i18n/de'
 // Import language files
 import { en } from 'payload/i18n/en'
 import { es } from 'payload/i18n/es'
 import { fr } from 'payload/i18n/fr'
-import { de } from 'payload/i18n/de'
-import { ar } from 'payload/i18n/ar'
+import sharp from 'sharp'
 import { Media } from './collections/Media'
-import { Posts } from './collections/Posts'
+import { Roles } from './collections/Roles'
 import { Users } from './collections/Users'
+import { seedDefaultRoles } from './lib/seed'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -27,7 +28,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Posts],
+  collections: [Users, Media, Roles],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -50,7 +51,7 @@ export default buildConfig({
         code: 'en',
       },
       {
-        label: 'Spanish', 
+        label: 'Spanish',
         code: 'es',
       },
       {
@@ -70,6 +71,10 @@ export default buildConfig({
     fallback: true,
   },
   sharp,
+  onInit: async (payload) => {
+    // Seed default roles
+    await seedDefaultRoles(payload)
+  },
   plugins: [
     payloadCloudPlugin(),
     // storage-adapter-placeholder
