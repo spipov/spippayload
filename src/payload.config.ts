@@ -7,6 +7,7 @@ import { getEmailAdapter } from './app/(payload)/emails/email'
 import { emailService } from './app/(payload)/emails/emailService'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
+import { nestedDocsPlugin } from '@payloadcms/plugin-nested-docs'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
@@ -110,6 +111,14 @@ export default buildConfig({
         payment: false, // Disable payment field for now
       },
       redirectRelationships: ['pages'], // Allow redirecting to pages after form submission
+    }),
+    nestedDocsPlugin({
+      collections: ['pages'], // Enable nested docs for Pages collection
+      generateLabel: (_, doc) => (doc.title as string) || (doc.id as string), // Use title as breadcrumb label
+      generateURL: (docs) => {
+        // Generate hierarchical URLs like /parent/child/grandchild
+        return docs.reduce((url, doc) => `${url}/${(doc.slug as string)}`, '')
+      },
     }),
     // storage-adapter-placeholder
   ],
