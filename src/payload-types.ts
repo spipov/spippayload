@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     roles: Role;
+    'email-settings': EmailSetting;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +80,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     roles: RolesSelect<false> | RolesSelect<true>;
+    'email-settings': EmailSettingsSelect<false> | EmailSettingsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -88,7 +90,7 @@ export interface Config {
   };
   globals: {};
   globalsSelect: {};
-  locale: 'en' | 'es' | 'fr' | 'de' | 'ar';
+  locale: 'en' | 'es' | 'fr';
   user: User & {
     collection: 'users';
   };
@@ -209,6 +211,51 @@ export interface Media {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-settings".
+ */
+export interface EmailSetting {
+  id: number;
+  /**
+   * A friendly name for this email configuration (e.g., "Gmail", "Outlook", "SMTP Server")
+   */
+  providerName: string;
+  /**
+   * Only one email configuration should be active at a time
+   */
+  isActive?: boolean | null;
+  /**
+   * SMTP server hostname (e.g., smtp.gmail.com)
+   */
+  smtpHost: string;
+  /**
+   * SMTP server port (587 for TLS, 465 for SSL, 25 for non-secure)
+   */
+  smtpPort: number;
+  /**
+   * Enable secure connection (recommended)
+   */
+  smtpSecure?: boolean | null;
+  /**
+   * Your email address or username for authentication
+   */
+  smtpUsername: string;
+  /**
+   * Your email password or app-specific password
+   */
+  smtpPassword: string;
+  /**
+   * The name that will appear as the sender (optional)
+   */
+  fromName?: string | null;
+  /**
+   * The email address that will appear as the sender
+   */
+  fromAddress: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -225,6 +272,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'roles';
         value: number | Role;
+      } | null)
+    | ({
+        relationTo: 'email-settings';
+        value: number | EmailSetting;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -328,6 +379,23 @@ export interface RolesSelect<T extends boolean = true> {
         canManageRoles?: T;
         canManageMedia?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-settings_select".
+ */
+export interface EmailSettingsSelect<T extends boolean = true> {
+  providerName?: T;
+  isActive?: T;
+  smtpHost?: T;
+  smtpPort?: T;
+  smtpSecure?: T;
+  smtpUsername?: T;
+  smtpPassword?: T;
+  fromName?: T;
+  fromAddress?: T;
   updatedAt?: T;
   createdAt?: T;
 }

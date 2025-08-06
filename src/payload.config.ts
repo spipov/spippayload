@@ -3,6 +3,8 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { postgresAdapter } from '@payloadcms/db-postgres'
+import { getEmailAdapter } from './app/(payload)/emails/email'
+import { emailService } from './app/(payload)/emails/emailService'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
 import { buildConfig } from 'payload'
@@ -13,10 +15,11 @@ import { en } from 'payload/i18n/en'
 import { es } from 'payload/i18n/es'
 import { fr } from 'payload/i18n/fr'
 import sharp from 'sharp'
+import EmailSettings from './collections/EmailSettings'
 import { Media } from './collections/Media'
 import { Roles } from './collections/Roles'
 import { Users } from './collections/Users'
-import { seedDefaultRoles } from './lib/seed'
+
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,7 +31,7 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Roles],
+  collections: [Users, Media, Roles, EmailSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -39,6 +42,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
   }),
+  // Email configuration will be handled dynamically through EmailSettings collection
   // i18n configuration for admin interface
   i18n: {
     supportedLanguages: { en, es, fr, de, ar },
@@ -58,22 +62,16 @@ export default buildConfig({
         label: 'French',
         code: 'fr',
       },
-      {
-        label: 'German',
-        code: 'de',
-      },
-      {
-        label: 'Arabic',
-        code: 'ar',
-      },
+  
     ],
     defaultLocale: 'en',
     fallback: true,
   },
   sharp,
   onInit: async (payload) => {
-    // Seed default roles
-    await seedDefaultRoles(payload)
+    // Initialize email service
+    emailService.setPayload(payload)
+    await emailService.refreshEmailAdapter()
   },
   plugins: [
     payloadCloudPlugin(),
