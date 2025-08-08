@@ -79,20 +79,20 @@ export const seedEmailTemplates = async (payload: Payload) => {
         }
       },
       textContent: 'Hello {{userName}},\n\nWelcome to {{appName}}! We\'re excited to have you on board.\n\nYour account has been successfully created. You can now access all our features and start exploring.\n\nIf you have any questions, feel free to reach out to our support team.\n\nBest regards,\nThe {{appName}} Team',
-      variables: [
-        {
-          name: 'userName',
-          description: 'The user\'s display name',
-          required: true,
-          defaultValue: 'User'
-        },
-        {
-          name: 'appName',
-          description: 'The application name',
-          required: true,
-          defaultValue: 'Our App'
-        }
-      ],
+      // variables: [
+      //   {
+      //     name: 'userName',
+      //     description: 'The user\'s display name',
+      //     required: true,
+      //     defaultValue: 'User'
+      //   },
+      //   {
+      //     name: 'appName',
+      //     description: 'The application name',
+      //     required: true,
+      //     defaultValue: 'Our App'
+      //   }
+      // ],
       isActive: true,
       testData: {
         userName: 'John Doe',
@@ -136,32 +136,32 @@ export const seedEmailTemplates = async (payload: Payload) => {
         }
       },
       textContent: 'Hello {{userName}},\n\nWe received a request to reset your password for your {{appName}} account.\n\nClick the link below to reset your password:\n{{resetLink}}\n\nThis link will expire in {{expirationTime}}. If you didn\'t request this reset, please ignore this email.\n\nBest regards,\nThe {{appName}} Team',
-      variables: [
-        {
-          name: 'userName',
-          description: 'The user\'s display name',
-          required: true,
-          defaultValue: 'User'
-        },
-        {
-          name: 'appName',
-          description: 'The application name',
-          required: true,
-          defaultValue: 'Our App'
-        },
-        {
-          name: 'resetLink',
-          description: 'The password reset link',
-          required: true,
-          defaultValue: 'https://example.com/reset'
-        },
-        {
-          name: 'expirationTime',
-          description: 'How long the reset link is valid',
-          required: false,
-          defaultValue: '24 hours'
-        }
-      ],
+      // variables: [
+      //   {
+      //     name: 'userName',
+      //     description: 'The user\'s display name',
+      //     required: true,
+      //     defaultValue: 'User'
+      //   },
+      //   {
+      //     name: 'appName',
+      //     description: 'The application name',
+      //     required: true,
+      //     defaultValue: 'Our App'
+      //   },
+      //   {
+      //     name: 'resetLink',
+      //     description: 'The password reset link',
+      //     required: true,
+      //     defaultValue: 'https://example.com/reset'
+      //   },
+      //   {
+      //     name: 'expirationTime',
+      //     description: 'How long the reset link is valid',
+      //     required: false,
+      //     defaultValue: '24 hours'
+      //   }
+      // ],
       isActive: true,
       testData: {
         userName: 'John Doe',
@@ -207,26 +207,26 @@ export const seedEmailTemplates = async (payload: Payload) => {
         }
       },
       textContent: 'Hello {{userName}},\n\nThank you for signing up for {{appName}}! To complete your registration, please verify your email address.\n\nClick the link below to verify your email:\n{{verificationLink}}\n\nIf you didn\'t create an account with {{appName}}, please ignore this email.\n\nBest regards,\nThe {{appName}} Team',
-      variables: [
-        {
-          name: 'userName',
-          description: 'The user\'s display name',
-          required: true,
-          defaultValue: 'User'
-        },
-        {
-          name: 'appName',
-          description: 'The application name',
-          required: true,
-          defaultValue: 'Our App'
-        },
-        {
-          name: 'verificationLink',
-          description: 'The email verification link',
-          required: true,
-          defaultValue: 'https://example.com/verify'
-        }
-      ],
+      // variables: [
+      //   {
+      //     name: 'userName',
+      //     description: 'The user\'s display name',
+      //     required: true,
+      //     defaultValue: 'User'
+      //   },
+      //   {
+      //     name: 'appName',
+      //     description: 'The application name',
+      //     required: true,
+      //     defaultValue: 'Our App'
+      //   },
+      //   {
+      //     name: 'verificationLink',
+      //     description: 'The email verification link',
+      //     required: true,
+      //     defaultValue: 'https://example.com/verify'
+      //   }
+      // ],
       isActive: true,
       testData: {
         userName: 'John Doe',
@@ -271,32 +271,32 @@ export const seedEmailTemplates = async (payload: Payload) => {
         }
       },
       textContent: 'Hello {{userName}},\n\nWe\'re writing to let you know that your {{appName}} account has been updated.\n\nChanges made: {{changeDescription}}\nDate: {{updateDate}}\n\nIf you didn\'t make these changes, please contact our support team immediately.\n\nBest regards,\nThe {{appName}} Team',
-      variables: [
-        {
-          name: 'userName',
-          description: 'The user\'s display name',
-          required: true,
-          defaultValue: 'User'
-        },
-        {
-          name: 'appName',
-          description: 'The application name',
-          required: true,
-          defaultValue: 'Our App'
-        },
-        {
-          name: 'changeDescription',
-          description: 'Description of what was changed',
-          required: true,
-          defaultValue: 'Profile information updated'
-        },
-        {
-          name: 'updateDate',
-          description: 'When the update occurred',
-          required: true,
-          defaultValue: 'Today'
-        }
-      ],
+      // variables: [
+      //   {
+      //     name: 'userName',
+      //     description: 'The user\'s display name',
+      //     required: true,
+      //     defaultValue: 'User'
+      //   },
+      //   {
+      //     name: 'appName',
+      //     description: 'The application name',
+      //     required: true,
+      //     defaultValue: 'Our App'
+      //   },
+      //   {
+      //     name: 'changeDescription',
+      //     description: 'Description of what was changed',
+      //     required: true,
+      //     defaultValue: 'Profile information updated'
+      //   },
+      //   {
+      //     name: 'updateDate',
+      //     description: 'When the update occurred',
+      //     required: true,
+      //     defaultValue: 'Today'
+      //   }
+      // ],
       isActive: true,
       testData: {
         userName: 'John Doe',
@@ -342,32 +342,32 @@ export const seedEmailTemplates = async (payload: Payload) => {
         }
       },
       textContent: 'Hello {{userName}},\n\nWe wanted to let you know that {{appName}} will be undergoing scheduled maintenance.\n\nMaintenance Window: {{maintenanceWindow}}\nExpected Duration: {{duration}}\n\nDuring this time, you may experience limited access to some features. We apologize for any inconvenience.\n\nThank you for your patience.\n\nThe {{appName}} Team',
-      variables: [
-        {
-          name: 'userName',
-          description: 'The user\'s display name',
-          required: false,
-          defaultValue: 'User'
-        },
-        {
-          name: 'appName',
-          description: 'The application name',
-          required: true,
-          defaultValue: 'Our App'
-        },
-        {
-          name: 'maintenanceWindow',
-          description: 'When the maintenance will occur',
-          required: true,
-          defaultValue: 'Sunday, 2:00 AM - 4:00 AM EST'
-        },
-        {
-          name: 'duration',
-          description: 'How long the maintenance is expected to last',
-          required: true,
-          defaultValue: '2 hours'
-        }
-      ],
+      // variables: [
+      //   {
+      //     name: 'userName',
+      //     description: 'The user\'s display name',
+      //     required: false,
+      //     defaultValue: 'User'
+      //   },
+      //   {
+      //     name: 'appName',
+      //     description: 'The application name',
+      //     required: true,
+      //     defaultValue: 'Our App'
+      //   },
+      //   {
+      //     name: 'maintenanceWindow',
+      //     description: 'When the maintenance will occur',
+      //     required: true,
+      //     defaultValue: 'Sunday, 2:00 AM - 4:00 AM EST'
+      //   },
+      //   {
+      //     name: 'duration',
+      //     description: 'How long the maintenance is expected to last',
+      //     required: true,
+      //     defaultValue: '2 hours'
+      //   }
+      // ],
       isActive: true,
       testData: {
         userName: 'John Doe',

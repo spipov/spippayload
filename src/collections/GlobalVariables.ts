@@ -4,7 +4,7 @@ export const GlobalVariables: CollectionConfig = {
   slug: 'global-variables',
   admin: {
     useAsTitle: 'name',
-    group: 'Email System',
+    group: 'Settings',
     description: 'Manage global variables available across all email templates, headers, and footers',
     defaultColumns: ['name', 'description', 'value', 'category', 'isActive'],
   },
@@ -24,7 +24,7 @@ export const GlobalVariables: CollectionConfig = {
         description: 'Variable name (without curly braces). Will be used as {{variable_name}}',
         placeholder: 'company_name',
       },
-      validate: (value: string) => {
+      validate: (value: any) => {
         if (value && !/^[a-zA-Z][a-zA-Z0-9_]*$/.test(value)) {
           return 'Variable name must start with a letter and contain only letters, numbers, and underscores'
         }

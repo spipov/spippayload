@@ -10,7 +10,9 @@ interface EmailTemplateEditorProps {
 
 export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }) => {
   const [previewMode, setPreviewMode] = useState<'edit' | 'preview'>('edit')
-  const [selectedSection, setSelectedSection] = useState<'subject' | 'preheader' | 'content'>('content')
+  const [selectedSection, setSelectedSection] = useState<'subject' | 'preheader' | 'content'>(
+    'content',
+  )
 
   // Get form fields - fix path references to match the actual field names
   const subjectField = useField({ path: 'subject' })
@@ -137,13 +139,18 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
     const variables = {
       ...systemVariables,
       ...templateSpecificVariables,
-      ...(currentValues.testData && typeof currentValues.testData === 'object' ? currentValues.testData : {}),
+      ...(currentValues.testData && typeof currentValues.testData === 'object'
+        ? currentValues.testData
+        : {}),
     }
 
     let processedContent = String(content)
     Object.entries(variables).forEach(([variable, value]) => {
       if (typeof processedContent === 'string' && typeof value !== 'undefined') {
-        processedContent = processedContent.replace(new RegExp(variable.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), String(value))
+        processedContent = processedContent.replace(
+          new RegExp(variable.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'),
+          String(value),
+        )
       }
     })
 
@@ -153,7 +160,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
   // Generate styled preview
   const generatePreview = () => {
     try {
-    const baseStyles = `
+      const baseStyles = `
       <style>
         body {
           font-family: ${sampleBranding.typography.fontFamily};
@@ -229,14 +236,14 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
       </style>
     `
 
-    const headerHtml = `
+      const headerHtml = `
       <div class="email-header">
         <h1>${sampleBranding.appName}</h1>
         <p>${sampleBranding.tagline}</p>
       </div>
     `
 
-    const footerHtml = `
+      const footerHtml = `
       <div class="email-footer">
         <p>© ${new Date().getFullYear()} ${sampleBranding.appName}. All rights reserved.</p>
         <p>
@@ -246,15 +253,15 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
       </div>
     `
 
-    const processedContent = replaceVariables(currentValues.htmlContent)
-    
-    return `
+      const processedContent = replaceVariables((currentValues as any).htmlContent || '')
+
+      return `
       <!DOCTYPE html>
       <html>
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${replaceVariables(currentValues.subject)}</title>
+        <title>${replaceVariables((currentValues as any).subject || 'Email Template')}</title>
         ${baseStyles}
       </head>
       <body>
@@ -304,7 +311,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
     currentValues.testData,
     currentValues.variables,
     typography,
-    updatePreview
+    updatePreview,
   ])
 
   // Initial preview generation
@@ -316,16 +323,18 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
   return (
     <div style={{ marginTop: '20px' }}>
       {/* Header Controls */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: '16px',
-        padding: '16px',
-        backgroundColor: '#f8f9fa',
-        borderRadius: '8px',
-        border: '1px solid #e1e5e9'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: '16px',
+          padding: '16px',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '8px',
+          border: '1px solid #e1e5e9',
+        }}
+      >
         <div>
           <h4 style={{ margin: '0 0 8px 0', fontSize: '16px', fontWeight: '600' }}>
             Email Template Editor
@@ -349,7 +358,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
               border: '1px solid #ddd',
               borderRadius: '4px',
               fontSize: '14px',
-              minWidth: '150px'
+              minWidth: '150px',
             }}
           >
             <option value="">Load Template...</option>
@@ -359,7 +368,14 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
           </select>
 
           {/* Mode Toggle */}
-          <div style={{ display: 'flex', border: '1px solid #ddd', borderRadius: '4px', overflow: 'hidden' }}>
+          <div
+            style={{
+              display: 'flex',
+              border: '1px solid #ddd',
+              borderRadius: '4px',
+              overflow: 'hidden',
+            }}
+          >
             <button
               type="button"
               onClick={() => setPreviewMode('edit')}
@@ -369,7 +385,7 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
                 backgroundColor: previewMode === 'edit' ? sampleBranding.colors.primary : 'white',
                 color: previewMode === 'edit' ? 'white' : '#666',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               Edit
@@ -380,10 +396,11 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
               style={{
                 padding: '8px 12px',
                 border: 'none',
-                backgroundColor: previewMode === 'preview' ? sampleBranding.colors.primary : 'white',
+                backgroundColor:
+                  previewMode === 'preview' ? sampleBranding.colors.primary : 'white',
                 color: previewMode === 'preview' ? 'white' : '#666',
                 cursor: 'pointer',
-                fontSize: '12px'
+                fontSize: '12px',
               }}
             >
               Preview
@@ -396,9 +413,22 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
       <div style={{ display: 'flex', gap: '16px', minHeight: '500px' }}>
         {/* Editor Panel */}
         {previewMode === 'edit' && (
-          <div style={{ flex: 1, border: '1px solid #e1e5e9', borderRadius: '8px', overflow: 'hidden' }}>
+          <div
+            style={{
+              flex: 1,
+              border: '1px solid #e1e5e9',
+              borderRadius: '8px',
+              overflow: 'hidden',
+            }}
+          >
             {/* Section Tabs */}
-            <div style={{ display: 'flex', borderBottom: '1px solid #e1e5e9', backgroundColor: '#f8f9fa' }}>
+            <div
+              style={{
+                display: 'flex',
+                borderBottom: '1px solid #e1e5e9',
+                backgroundColor: '#f8f9fa',
+              }}
+            >
               {[
                 { key: 'subject', label: 'Subject' },
                 { key: 'preheader', label: 'Preheader' },
@@ -412,11 +442,14 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
                     padding: '12px 16px',
                     border: 'none',
                     backgroundColor: selectedSection === key ? 'white' : 'transparent',
-                    borderBottom: selectedSection === key ? '2px solid ' + sampleBranding.colors.primary : '2px solid transparent',
+                    borderBottom:
+                      selectedSection === key
+                        ? '2px solid ' + sampleBranding.colors.primary
+                        : '2px solid transparent',
                     cursor: 'pointer',
                     fontSize: '14px',
                     fontWeight: selectedSection === key ? '600' : 'normal',
-                    color: selectedSection === key ? sampleBranding.colors.primary : '#666'
+                    color: selectedSection === key ? sampleBranding.colors.primary : '#666',
                   }}
                 >
                   {label}
@@ -428,13 +461,21 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
             <div style={{ padding: '20px' }}>
               {selectedSection === 'subject' && (
                 <div>
-                  <label htmlFor="email-subject" style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                  <label
+                    htmlFor="email-subject"
+                    style={{
+                      display: 'block',
+                      marginBottom: '8px',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                    }}
+                  >
                     Email Subject Line
                   </label>
                   <input
                     id="email-subject"
                     type="text"
-                    value={currentValues.subject}
+                    value={(currentValues as any).subject || ''}
                     onChange={(e) => {
                       subjectField.setValue(e.target.value)
                     }}
@@ -445,24 +486,32 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
                       border: '1px solid #ddd',
                       borderRadius: '4px',
                       fontSize: '16px',
-                      fontFamily: 'inherit'
+                      fontFamily: 'inherit',
                     }}
                   />
                   <p style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                    Preview: {replaceVariables(currentValues.subject)}
+                    Preview: {replaceVariables((currentValues as any).subject || '')}
                   </p>
                 </div>
               )}
 
               {selectedSection === 'preheader' && (
                 <div>
-                  <label htmlFor="email-preheader" style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                  <label
+                    htmlFor="email-preheader"
+                    style={{
+                      display: 'block',
+                      marginBottom: '8px',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                    }}
+                  >
                     Preheader Text
                   </label>
                   <input
                     id="email-preheader"
                     type="text"
-                    value={currentValues.preheader}
+                    value={(currentValues as any).preheader || ''}
                     onChange={(e) => {
                       preheaderField.setValue(e.target.value)
                     }}
@@ -473,23 +522,32 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
                       border: '1px solid #ddd',
                       borderRadius: '4px',
                       fontSize: '16px',
-                      fontFamily: 'inherit'
+                      fontFamily: 'inherit',
                     }}
                   />
                   <p style={{ fontSize: '12px', color: '#666', marginTop: '8px' }}>
-                    This appears as preview text in email clients. Preview: {replaceVariables(currentValues.preheader)}
+                    This appears as preview text in email clients. Preview:{' '}
+                    {replaceVariables((currentValues as any).preheader || '')}
                   </p>
                 </div>
               )}
 
               {selectedSection === 'content' && (
                 <div>
-                  <label htmlFor="email-html-content" style={{ display: 'block', marginBottom: '8px', fontWeight: '600', fontSize: '14px' }}>
+                  <label
+                    htmlFor="email-html-content"
+                    style={{
+                      display: 'block',
+                      marginBottom: '8px',
+                      fontWeight: '600',
+                      fontSize: '14px',
+                    }}
+                  >
                     Email Content (HTML)
                   </label>
                   <textarea
                     id="email-html-content"
-                    value={currentValues.htmlContent}
+                    value={(currentValues as any).htmlContent || ''}
                     onChange={(e) => {
                       htmlContentField.setValue(e.target.value)
                     }}
@@ -502,16 +560,36 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
                       borderRadius: '4px',
                       fontSize: '14px',
                       fontFamily: 'monospace',
-                      resize: 'vertical'
+                      resize: 'vertical',
                     }}
                   />
                   <div style={{ marginTop: '12px', fontSize: '12px', color: '#666' }}>
-                    <p><strong>Available CSS classes:</strong></p>
+                    <p>
+                      <strong>Available CSS classes:</strong>
+                    </p>
                     <ul style={{ margin: '4px 0', paddingLeft: '16px' }}>
-                      <li><code>.btn</code> - Styled button</li>
-                      <li><code>.secondary-text</code> - Light colored text</li>
+                      <li>
+                        <code>.btn</code> - Styled button
+                      </li>
+                      <li>
+                        <code>.secondary-text</code> - Light colored text
+                      </li>
                     </ul>
-                    <p><strong>Available variables:</strong> {'{'}{'{'} app_name {'}'}{'}'},  {'{'}{'{'} user_name {'}'}{'}'},  {'{'}{'{'} user_email {'}'}{'}'},  {'{'}{'{'} support_email {'}'}{'}'},  {'{'}{'{'} website_url {'}'}{'}'},  {'{'}{'{'} current_year {'}'}{'}'}</p>
+                    <p>
+                      <strong>Available variables:</strong> {'{'}
+                      {'{'} app_name {'}'}
+                      {'}'}, {'{'}
+                      {'{'} user_name {'}'}
+                      {'}'}, {'{'}
+                      {'{'} user_email {'}'}
+                      {'}'}, {'{'}
+                      {'{'} support_email {'}'}
+                      {'}'}, {'{'}
+                      {'{'} website_url {'}'}
+                      {'}'}, {'{'}
+                      {'{'} current_year {'}'}
+                      {'}'}
+                    </p>
                   </div>
                 </div>
               )}
@@ -520,30 +598,34 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
         )}
 
         {/* Preview Panel */}
-        <div style={{ 
-          flex: previewMode === 'preview' ? 1 : 0.6,
-          border: '1px solid #e1e5e9',
-          borderRadius: '8px',
-          overflow: 'hidden',
-          backgroundColor: '#f5f5f5'
-        }}>
-          <div style={{
-            padding: '12px 16px',
-            backgroundColor: '#f8f9fa',
-            borderBottom: '1px solid #e1e5e9',
-            fontSize: '14px',
-            fontWeight: '600'
-          }}>
+        <div
+          style={{
+            flex: previewMode === 'preview' ? 1 : 0.6,
+            border: '1px solid #e1e5e9',
+            borderRadius: '8px',
+            overflow: 'hidden',
+            backgroundColor: '#f5f5f5',
+          }}
+        >
+          <div
+            style={{
+              padding: '12px 16px',
+              backgroundColor: '#f8f9fa',
+              borderBottom: '1px solid #e1e5e9',
+              fontSize: '14px',
+              fontWeight: '600',
+            }}
+          >
             Live Preview
           </div>
-          
+
           <iframe
             srcDoc={previewHtml}
             style={{
               width: '100%',
               height: previewMode === 'preview' ? '600px' : '400px',
               border: 'none',
-              backgroundColor: 'white'
+              backgroundColor: 'white',
             }}
             title="Email Preview"
           />
@@ -551,16 +633,19 @@ export const EmailTemplateEditor: React.FC<EmailTemplateEditorProps> = ({ path }
       </div>
 
       {/* Variable Helper Note */}
-      <div style={{
-        marginTop: '16px',
-        padding: '12px',
-        backgroundColor: '#e3f2fd',
-        borderRadius: '6px',
-        border: '1px solid #bbdefb',
-        fontSize: '14px',
-        color: '#1565c0'
-      }}>
-        💡 <strong>Tip:</strong> Check the "Variable Reference" in the sidebar for a complete list of all available variables you can use in your template.
+      <div
+        style={{
+          marginTop: '16px',
+          padding: '12px',
+          backgroundColor: '#e3f2fd',
+          borderRadius: '6px',
+          border: '1px solid #bbdefb',
+          fontSize: '14px',
+          color: '#1565c0',
+        }}
+      >
+        💡 <strong>Tip:</strong> Check the "Variable Reference" in the sidebar for a complete list
+        of all available variables you can use in your template.
       </div>
     </div>
   )

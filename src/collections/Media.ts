@@ -6,7 +6,7 @@ export const Media: CollectionConfig = {
   admin: {
     useAsTitle: "filename",
     defaultColumns: ["filename", "folder", "fileType", "alt", "updatedAt"],
-    group: "Content",
+    group: "Collections",
     description:
       "Manage all media files with automatic organization by type and folder",
     pagination: {
@@ -100,7 +100,7 @@ export const Media: CollectionConfig = {
   ],
   upload: {
     staticDir: "media",
-    adminThumbnail: ({ doc }) => {
+    adminThumbnail: ({ doc }: any) => {
       // Don't show thumbnails for font files
       if (doc.mimeType?.startsWith("font/")) {
         return null;

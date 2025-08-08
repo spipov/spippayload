@@ -193,7 +193,7 @@ export class EmailTemplateService {
       : '/default-logo.png'
 
     const colors = branding.colors || {}
-    const typography = branding.typography || {}
+    const typography = (branding as any).typography || {}
     const contact = branding.contact || {}
     const socialLinks = branding.socialLinks || []
     const emailSettings = branding.emailSettings || {}
@@ -423,7 +423,7 @@ export class EmailTemplateService {
       )
 
       // Get template variables for validation
-      const templateVariables = (template.variables || []) as EmailVariable[]
+      const templateVariables = ((template as any).variables || []) as EmailVariable[]
 
       // Render content
       const subject = this.replaceVariables(
@@ -436,8 +436,10 @@ export class EmailTemplateService {
         typeof template.textContent === 'string' ? template.textContent : '',
         globalVariables,
         templateVariables
-      )     const htmlContent = this.replaceVariables(
-        (template.htmlContent as string) || '',
+      )
+      
+      const htmlContent = this.replaceVariables(
+        (template.htmlContent as unknown as string) || '',
         globalVariables,
         templateVariables
       )
@@ -477,7 +479,7 @@ export class EmailTemplateService {
     template: EmailTemplate,
     variables: TemplateData
   ): { valid: boolean; missingRequired: string[]; errors: string[] } {
-    const templateVariables = (template.variables || []) as EmailVariable[]
+    const templateVariables = ((template as any).variables || []) as EmailVariable[]
     const missingRequired: string[] = []
     const errors: string[] = []
 

@@ -39,6 +39,9 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    components: {
+      // Add custom navigation grouping
+    },
   },
   collections: [
     Users,
@@ -128,6 +131,16 @@ export default buildConfig({
         payment: false, // Disable payment field for now
       },
       redirectRelationships: ["pages"], // Allow redirecting to pages after form submission
+      formOverrides: {
+        admin: {
+          group: "Forms",
+        },
+      },
+      formSubmissionOverrides: {
+        admin: {
+          group: "Forms",
+        },
+      },
     }),
     nestedDocsPlugin({
       collections: ["pages"], // Enable nested docs for Pages collection

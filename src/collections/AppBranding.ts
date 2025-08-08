@@ -2,9 +2,13 @@ import type { CollectionConfig } from "payload";
 
 export const AppBranding: CollectionConfig = {
   slug: "app-branding",
+  labels: {
+    singular: "Branding",
+    plural: "Branding",
+  },
   admin: {
     useAsTitle: "appName",
-    group: "App Settings",
+    group: "Settings",
     description: "Manage app-wide branding, colors, and visual identity",
   },
   access: {
@@ -215,7 +219,7 @@ export const AppBranding: CollectionConfig = {
               "Variable name (without curly braces, no spaces). Format: {{variable_name}}",
             placeholder: "app_name",
           },
-          validate: (value: string) => {
+          validate: (value: any) => {
             if (value && !/^[a-zA-Z][a-zA-Z0-9_]*$/.test(value)) {
               return "Variable name must start with a letter and contain only letters, numbers, and underscores (no spaces)";
             }
@@ -284,8 +288,6 @@ export const AppBranding: CollectionConfig = {
           type: "ui",
           label: "Usage in Templates",
           admin: {
-            description:
-              "Shows how to use this variable in templates (copy this exact format)",
             components: {
               Field: "@/components/VariableUsageField",
             },
@@ -301,7 +303,6 @@ export const AppBranding: CollectionConfig = {
         components: {
           Field: "@/components/EmailPreview",
         },
-        description: "Preview how your branding affects email templates",
       },
     },
     {
@@ -329,7 +330,7 @@ export const AppBranding: CollectionConfig = {
           name: "website",
           type: "text",
           label: "Website URL",
-          validate: (value: string) => {
+          validate: (value: any) => {
             if (value && !/^https?:\/\/.+/.test(value)) {
               return "Please enter a valid URL starting with http:// or https://";
             }
@@ -364,7 +365,7 @@ export const AppBranding: CollectionConfig = {
           type: "text",
           label: "Profile URL",
           required: true,
-          validate: (value: string) => {
+          validate: (value: any) => {
             if (value && !/^https?:\/\/.+/.test(value)) {
               return "Please enter a valid URL starting with http:// or https://";
             }
@@ -454,7 +455,6 @@ export const AppBranding: CollectionConfig = {
           label: "Email Line Height",
           min: 1,
           max: 2.5,
-          step: 0.1,
           defaultValue: 1.6,
           admin: {
             description: "Line height for email text (1.6 recommended)",
@@ -466,7 +466,6 @@ export const AppBranding: CollectionConfig = {
           label: "Email Paragraph Spacing",
           min: 0,
           max: 40,
-          step: 2,
           defaultValue: 16,
           admin: {
             description: "Spacing between paragraphs in pixels",

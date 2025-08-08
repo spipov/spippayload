@@ -4,7 +4,7 @@ export const EmailLayouts: CollectionConfig = {
   slug: "email-layouts",
   admin: {
     useAsTitle: "name",
-    group: "Email System",
+    group: "Settings",
     description: "Manage email header and footer layouts",
     defaultColumns: ["name", "description", "isDefault", "isActive"],
   },
@@ -555,7 +555,6 @@ export const EmailLayouts: CollectionConfig = {
               label: "Line Height",
               min: 1,
               max: 2.5,
-              step: 0.1,
               defaultValue: 1.6,
               admin: {
                 description: "Line height for text (1.6 recommended)",
@@ -601,8 +600,6 @@ export const EmailLayouts: CollectionConfig = {
         components: {
           Field: "@/components/VariableReference",
         },
-        description:
-          "Reference for all available variables you can use in headers and footers",
       },
     },
   ],

@@ -4,7 +4,7 @@ export const EmailTemplates: CollectionConfig = {
   slug: "email-templates",
   admin: {
     useAsTitle: "name",
-    group: "Email System",
+    group: "Settings",
     description: "Manage email templates with variables and branding",
   },
   access: {
@@ -30,7 +30,7 @@ export const EmailTemplates: CollectionConfig = {
       admin: {
         description: "Unique identifier for this template (used in code)",
       },
-      validate: (value: string) => {
+      validate: (value: any) => {
         if (value && !/^[a-z0-9-_]+$/.test(value)) {
           return "Slug can only contain lowercase letters, numbers, hyphens, and underscores";
         }
@@ -87,8 +87,6 @@ export const EmailTemplates: CollectionConfig = {
         components: {
           Field: "@/components/EmailTemplateEditor",
         },
-        description:
-          "Edit your email template with live preview and variable support",
       },
     },
     // Variable Reference
@@ -100,8 +98,6 @@ export const EmailTemplates: CollectionConfig = {
         components: {
           Field: "@/components/VariableReference",
         },
-        description:
-          "Reference for all available variables you can use in this template",
         position: "sidebar",
       },
     },
@@ -244,7 +240,6 @@ export const EmailTemplates: CollectionConfig = {
           label: "Line Height",
           min: 1,
           max: 2.5,
-          step: 0.1,
           defaultValue: 1.6,
           admin: {
             description: "Line height for text (1.6 recommended)",

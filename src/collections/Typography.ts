@@ -2,9 +2,13 @@ import type { CollectionConfig } from "payload";
 
 export const Typography: CollectionConfig = {
   slug: "typography",
+  labels: {
+    singular: "Typography",
+    plural: "Typography",
+  },
   admin: {
     useAsTitle: "name",
-    group: "Branding",
+    group: "Settings",
     description:
       "Manage custom fonts and typography settings for emails and website",
     defaultColumns: ["name", "fontFamily", "isActive", "usage"],
@@ -192,7 +196,6 @@ export const Typography: CollectionConfig = {
           type: "number",
           min: 1,
           max: 3,
-          step: 0.1,
           defaultValue: 1.4,
           admin: {
             description: "Line height for email text (1.4 recommended)",
@@ -203,7 +206,6 @@ export const Typography: CollectionConfig = {
           type: "number",
           min: -2,
           max: 5,
-          step: 0.1,
           defaultValue: 0,
           admin: {
             description: "Letter spacing in pixels",
@@ -227,7 +229,6 @@ export const Typography: CollectionConfig = {
         components: {
           Field: "@/components/FontPreview",
         },
-        description: "Preview how this font will look",
       },
     },
     {
