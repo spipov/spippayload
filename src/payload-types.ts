@@ -72,6 +72,11 @@ export interface Config {
     roles: Role;
     'email-settings': EmailSetting;
     pages: Page;
+    'app-branding': AppBranding;
+    'email-templates': EmailTemplate;
+    'email-layouts': EmailLayout;
+    'global-variables': GlobalVariable;
+    typography: Typography;
     forms: Form;
     'form-submissions': FormSubmission;
     'payload-locked-documents': PayloadLockedDocument;
@@ -85,6 +90,11 @@ export interface Config {
     roles: RolesSelect<false> | RolesSelect<true>;
     'email-settings': EmailSettingsSelect<false> | EmailSettingsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    'app-branding': AppBrandingSelect<false> | AppBrandingSelect<true>;
+    'email-templates': EmailTemplatesSelect<false> | EmailTemplatesSelect<true>;
+    'email-layouts': EmailLayoutsSelect<false> | EmailLayoutsSelect<true>;
+    'global-variables': GlobalVariablesSelect<false> | GlobalVariablesSelect<true>;
+    typography: TypographySelect<false> | TypographySelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
@@ -196,6 +206,8 @@ export interface Role {
   createdAt: string;
 }
 /**
+ * Manage all media files with automatic organization by type and folder
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
@@ -203,6 +215,36 @@ export interface Media {
   id: number;
   alt: string;
   caption?: string | null;
+  /**
+   * Organize files into folders for better management
+   */
+  folder?:
+    | (
+        | ''
+        | 'images'
+        | 'fonts'
+        | 'documents'
+        | 'audio'
+        | 'video'
+        | 'email-assets'
+        | 'website-assets'
+        | 'app-assets'
+        | 'system'
+        | 'other'
+      )
+    | null;
+  /**
+   * Automatically detected file type
+   */
+  fileType?: ('image' | 'font' | 'document' | 'audio' | 'video' | 'other') | null;
+  /**
+   * Comma-separated tags for better searchability (e.g., logo, header, woff2)
+   */
+  tags?: string | null;
+  /**
+   * Where this file is intended to be used
+   */
+  usage?: ('email' | 'website' | 'mobile' | 'print' | 'social' | 'branding')[] | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -214,6 +256,40 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    tablet?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    desktop?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -309,6 +385,474 @@ export interface Page {
         id?: string | null;
       }[]
     | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage app-wide branding, colors, and visual identity
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "app-branding".
+ */
+export interface AppBranding {
+  id: number;
+  /**
+   * Internal name for this branding configuration
+   */
+  name: string;
+  /**
+   * Primary logo (recommended: 200x60px for emails, 300x100px for web)
+   */
+  logo: number | Media;
+  /**
+   * Website favicon (32x32px)
+   */
+  favicon?: (number | null) | Media;
+  /**
+   * Application/brand name displayed across the app
+   */
+  appName: string;
+  /**
+   * Optional tagline displayed below the app name
+   */
+  tagline?: string | null;
+  /**
+   * Define your app's color scheme with live preview
+   */
+  colors?: {
+    /**
+     * Main brand color (buttons, links, headers)
+     */
+    primary?: string | null;
+    secondary?: string | null;
+    accent?: string | null;
+    background?: string | null;
+    text?: string | null;
+    textLight?: string | null;
+  };
+  /**
+   * Define global variables that can be used throughout the app (emails, pages, etc.). Use format: {{variable_name}} (no spaces)
+   */
+  globalVariables?:
+    | {
+        /**
+         * Variable name (without curly braces, no spaces). Format: {{variable_name}}
+         */
+        name: string;
+        /**
+         * The value this variable represents
+         */
+        value?: string | null;
+        /**
+         * Description of what this variable represents and how it's used
+         */
+        description?: string | null;
+        /**
+         * Category helps organize variables by their purpose
+         */
+        category?: ('general' | 'contact' | 'user' | 'system' | 'social' | 'legal') | null;
+        /**
+         * If checked, this variable is automatically filled by the system (e.g., user_name, current_year)
+         */
+        isSystemGenerated?: boolean | null;
+        /**
+         * If unchecked, users cannot modify this variable's value
+         */
+        isEditable?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  contact: {
+    supportEmail: string;
+    phone?: string | null;
+    address?: string | null;
+    website?: string | null;
+  };
+  socialLinks?:
+    | {
+        platform: 'facebook' | 'twitter' | 'instagram' | 'linkedin' | 'youtube' | 'tiktok' | 'discord' | 'github';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Configure fonts and typography for emails and website
+   */
+  emailTypography?: {
+    /**
+     * Primary font for headings and important text
+     */
+    primaryFont?: (number | null) | Typography;
+    /**
+     * Secondary font for body text and paragraphs
+     */
+    secondaryFont?: (number | null) | Typography;
+    /**
+     * Accent font for special text and callouts
+     */
+    accentFont?: (number | null) | Typography;
+    /**
+     * Default heading size for emails
+     */
+    headingSize?: ('24' | '28' | '32' | '36' | '40') | null;
+    /**
+     * Default body text size for emails
+     */
+    bodySize?: ('14' | '16' | '18' | '20') | null;
+    /**
+     * Line height for email text (1.6 recommended)
+     */
+    lineHeight?: number | null;
+    /**
+     * Spacing between paragraphs in pixels
+     */
+    paragraphSpacing?: number | null;
+  };
+  emailSettings?: {
+    showUnsubscribeLink?: boolean | null;
+    showPreferencesLink?: boolean | null;
+    includeViewInBrowser?: boolean | null;
+  };
+  /**
+   * Set as the active branding configuration for the entire app
+   */
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage custom fonts and typography settings for emails and website
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "typography".
+ */
+export interface Typography {
+  id: number;
+  /**
+   * Descriptive name for this font configuration
+   */
+  name: string;
+  /**
+   * CSS font-family name (will be used in CSS)
+   */
+  fontFamily: string;
+  /**
+   * Human-readable font name
+   */
+  displayName: string;
+  /**
+   * Font category for organization and usage
+   */
+  category: 'primary' | 'secondary' | 'accent' | 'monospace';
+  /**
+   * Where this font can be used
+   */
+  usage: ('email' | 'frontend' | 'admin')[];
+  /**
+   * Upload custom font files (WOFF2 recommended for best performance)
+   */
+  fontFiles?: {
+    /**
+     * WOFF2 font file (recommended - best compression)
+     */
+    woff2?: (number | null) | Media;
+    /**
+     * WOFF font file (fallback for older browsers)
+     */
+    woff?: (number | null) | Media;
+    /**
+     * TTF font file (fallback)
+     */
+    ttf?: (number | null) | Media;
+  };
+  /**
+   * Web-safe fallback fonts (comma-separated)
+   */
+  webSafeFallbacks: string;
+  /**
+   * Define which font weights are available for this font
+   */
+  fontWeights?:
+    | {
+        weight: '100' | '200' | '300' | '400' | '500' | '600' | '700' | '800' | '900';
+        name: string;
+        /**
+         * Use this weight as the default for this font
+         */
+        isDefault?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Typography settings optimized for email clients
+   */
+  emailSettings?: {
+    /**
+     * Line height for email text (1.4 recommended)
+     */
+    lineHeight?: number | null;
+    /**
+     * Letter spacing in pixels
+     */
+    letterSpacing?: number | null;
+    /**
+     * Email client fallback (for clients that don't support web fonts)
+     */
+    emailFallback?: string | null;
+  };
+  /**
+   * Whether this font is available for use
+   */
+  isActive?: boolean | null;
+  /**
+   * Internal notes about this font (licensing, usage guidelines, etc.)
+   */
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage email templates with variables and branding
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-templates".
+ */
+export interface EmailTemplate {
+  id: number;
+  /**
+   * Internal name for this email template
+   */
+  name: string;
+  /**
+   * Unique identifier for this template (used in code)
+   */
+  slug: string;
+  /**
+   * Template category for organization
+   */
+  category: 'auth' | 'account' | 'system';
+  /**
+   * Email subject line (supports variables like {{appName}}, {{userName}})
+   */
+  subject: string;
+  /**
+   * Preview text shown in email clients (supports variables)
+   */
+  preheader?: string | null;
+  /**
+   * HTML email content (supports variables like {{userName}}, {{verificationLink}}, etc.)
+   */
+  htmlContent: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Plain text version of the email (supports variables)
+   */
+  textContent: string;
+  /**
+   * Branding configuration to use for this template (leave empty to use active default)
+   */
+  branding?: (number | null) | AppBranding;
+  /**
+   * Whether this template is active and can be used
+   */
+  isActive?: boolean | null;
+  /**
+   * Sample data for testing this template (JSON format)
+   */
+  testData?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Override global and layout typography settings for this template
+   */
+  useCustomTypography?: boolean | null;
+  /**
+   * Font for headings and important text
+   */
+  primaryFont?: (number | null) | Typography;
+  /**
+   * Font for body text and paragraphs
+   */
+  secondaryFont?: (number | null) | Typography;
+  /**
+   * Font for special text and callouts
+   */
+  accentFont?: (number | null) | Typography;
+  /**
+   * Size for headings in this template
+   */
+  headingSize?: ('24' | '28' | '32' | '36' | '40') | null;
+  /**
+   * Size for body text in this template
+   */
+  bodySize?: ('14' | '16' | '18' | '20') | null;
+  /**
+   * Line height for text (1.6 recommended)
+   */
+  lineHeight?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage email header and footer layouts
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-layouts".
+ */
+export interface EmailLayout {
+  id: number;
+  /**
+   * Layout name for identification
+   */
+  name: string;
+  /**
+   * Description of this layout configuration
+   */
+  description?: string | null;
+  headerEnabled?: boolean | null;
+  headerLayout?: ('logo-center' | 'logo-left-name-right' | 'logo-only' | 'name-only' | 'custom') | null;
+  headerBackgroundColor?: string | null;
+  headerTextColor?: string | null;
+  headerPaddingTop?: number | null;
+  headerPaddingBottom?: number | null;
+  headerPaddingLeft?: number | null;
+  headerPaddingRight?: number | null;
+  headerBorder?: {
+    headerTopBorderEnabled?: boolean | null;
+    headerBottomBorderEnabled?: boolean | null;
+    headerBorderWidth?: number | null;
+    headerBorderColor?: string | null;
+    headerBorderStyle?: ('solid' | 'dashed' | 'dotted') | null;
+  };
+  logoSettings?: {
+    maxWidth?: number | null;
+    maxHeight?: number | null;
+  };
+  /**
+   * Custom HTML for header (supports variables like {{app_name}}, {{logo_url}})
+   */
+  headerCustomHtml?: string | null;
+  footerEnabled?: boolean | null;
+  footerLayout?: ('standard' | 'minimal' | 'social-only' | 'custom') | null;
+  footerBackgroundColor?: string | null;
+  footerTextColor?: string | null;
+  footerPaddingTop?: number | null;
+  footerPaddingBottom?: number | null;
+  footerPaddingLeft?: number | null;
+  footerPaddingRight?: number | null;
+  footerBorder?: {
+    footerTopBorderEnabled?: boolean | null;
+    footerBottomBorderEnabled?: boolean | null;
+    footerBorderWidth?: number | null;
+    footerBorderColor?: string | null;
+    footerBorderStyle?: ('solid' | 'dashed' | 'dotted') | null;
+  };
+  sections?: {
+    showSocialLinks?: boolean | null;
+    showContactInfo?: boolean | null;
+    showLegalLinks?: boolean | null;
+    showCopyright?: boolean | null;
+  };
+  /**
+   * Custom HTML for footer (supports all global variables)
+   */
+  footerCustomHtml?: string | null;
+  /**
+   * Override global typography settings for this layout
+   */
+  useCustomTypography?: boolean | null;
+  /**
+   * Font for headings and important text
+   */
+  primaryFont?: (number | null) | Typography;
+  /**
+   * Font for body text and paragraphs
+   */
+  secondaryFont?: (number | null) | Typography;
+  /**
+   * Font for special text and callouts
+   */
+  accentFont?: (number | null) | Typography;
+  /**
+   * Size for headings in this layout
+   */
+  headingSize?: ('24' | '28' | '32' | '36' | '40') | null;
+  /**
+   * Size for body text in this layout
+   */
+  bodySize?: ('14' | '16' | '18' | '20') | null;
+  /**
+   * Line height for text (1.6 recommended)
+   */
+  lineHeight?: number | null;
+  /**
+   * Set as the default layout for new email templates
+   */
+  isDefault?: boolean | null;
+  isActive?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage global variables available across all email templates, headers, and footers
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-variables".
+ */
+export interface GlobalVariable {
+  id: number;
+  /**
+   * Variable name (without curly braces). Will be used as {{variable_name}}
+   */
+  name: string;
+  /**
+   * Human-readable name for this variable
+   */
+  displayName: string;
+  /**
+   * Detailed description of what this variable represents and when to use it
+   */
+  description: string;
+  /**
+   * The actual value that will replace this variable in emails
+   */
+  value: string;
+  /**
+   * Category to organize variables
+   */
+  category: 'company' | 'contact' | 'branding' | 'legal' | 'social' | 'custom';
+  /**
+   * System variables are automatically generated and cannot be edited
+   */
+  isSystem?: boolean | null;
+  /**
+   * Whether this variable is available for use in templates
+   */
+  isActive?: boolean | null;
+  /**
+   * Example of how to use this variable in templates
+   */
+  usageExample?: string | null;
+  lastModified?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -546,6 +1090,26 @@ export interface PayloadLockedDocument {
         value: number | Page;
       } | null)
     | ({
+        relationTo: 'app-branding';
+        value: number | AppBranding;
+      } | null)
+    | ({
+        relationTo: 'email-templates';
+        value: number | EmailTemplate;
+      } | null)
+    | ({
+        relationTo: 'email-layouts';
+        value: number | EmailLayout;
+      } | null)
+    | ({
+        relationTo: 'global-variables';
+        value: number | GlobalVariable;
+      } | null)
+    | ({
+        relationTo: 'typography';
+        value: number | Typography;
+      } | null)
+    | ({
         relationTo: 'forms';
         value: number | Form;
       } | null)
@@ -628,6 +1192,10 @@ export interface UsersSelect<T extends boolean = true> {
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  folder?: T;
+  fileType?: T;
+  tags?: T;
+  usage?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -639,6 +1207,50 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        tablet?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        desktop?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -702,6 +1314,223 @@ export interface PagesSelect<T extends boolean = true> {
         label?: T;
         id?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "app-branding_select".
+ */
+export interface AppBrandingSelect<T extends boolean = true> {
+  name?: T;
+  logo?: T;
+  favicon?: T;
+  appName?: T;
+  tagline?: T;
+  colors?:
+    | T
+    | {
+        primary?: T;
+        secondary?: T;
+        accent?: T;
+        background?: T;
+        text?: T;
+        textLight?: T;
+      };
+  globalVariables?:
+    | T
+    | {
+        name?: T;
+        value?: T;
+        description?: T;
+        category?: T;
+        isSystemGenerated?: T;
+        isEditable?: T;
+        id?: T;
+      };
+  contact?:
+    | T
+    | {
+        supportEmail?: T;
+        phone?: T;
+        address?: T;
+        website?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  emailTypography?:
+    | T
+    | {
+        primaryFont?: T;
+        secondaryFont?: T;
+        accentFont?: T;
+        headingSize?: T;
+        bodySize?: T;
+        lineHeight?: T;
+        paragraphSpacing?: T;
+      };
+  emailSettings?:
+    | T
+    | {
+        showUnsubscribeLink?: T;
+        showPreferencesLink?: T;
+        includeViewInBrowser?: T;
+      };
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-templates_select".
+ */
+export interface EmailTemplatesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  category?: T;
+  subject?: T;
+  preheader?: T;
+  htmlContent?: T;
+  textContent?: T;
+  branding?: T;
+  isActive?: T;
+  testData?: T;
+  useCustomTypography?: T;
+  primaryFont?: T;
+  secondaryFont?: T;
+  accentFont?: T;
+  headingSize?: T;
+  bodySize?: T;
+  lineHeight?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email-layouts_select".
+ */
+export interface EmailLayoutsSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  headerEnabled?: T;
+  headerLayout?: T;
+  headerBackgroundColor?: T;
+  headerTextColor?: T;
+  headerPaddingTop?: T;
+  headerPaddingBottom?: T;
+  headerPaddingLeft?: T;
+  headerPaddingRight?: T;
+  headerBorder?:
+    | T
+    | {
+        headerTopBorderEnabled?: T;
+        headerBottomBorderEnabled?: T;
+        headerBorderWidth?: T;
+        headerBorderColor?: T;
+        headerBorderStyle?: T;
+      };
+  logoSettings?:
+    | T
+    | {
+        maxWidth?: T;
+        maxHeight?: T;
+      };
+  headerCustomHtml?: T;
+  footerEnabled?: T;
+  footerLayout?: T;
+  footerBackgroundColor?: T;
+  footerTextColor?: T;
+  footerPaddingTop?: T;
+  footerPaddingBottom?: T;
+  footerPaddingLeft?: T;
+  footerPaddingRight?: T;
+  footerBorder?:
+    | T
+    | {
+        footerTopBorderEnabled?: T;
+        footerBottomBorderEnabled?: T;
+        footerBorderWidth?: T;
+        footerBorderColor?: T;
+        footerBorderStyle?: T;
+      };
+  sections?:
+    | T
+    | {
+        showSocialLinks?: T;
+        showContactInfo?: T;
+        showLegalLinks?: T;
+        showCopyright?: T;
+      };
+  footerCustomHtml?: T;
+  useCustomTypography?: T;
+  primaryFont?: T;
+  secondaryFont?: T;
+  accentFont?: T;
+  headingSize?: T;
+  bodySize?: T;
+  lineHeight?: T;
+  isDefault?: T;
+  isActive?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "global-variables_select".
+ */
+export interface GlobalVariablesSelect<T extends boolean = true> {
+  name?: T;
+  displayName?: T;
+  description?: T;
+  value?: T;
+  category?: T;
+  isSystem?: T;
+  isActive?: T;
+  usageExample?: T;
+  lastModified?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "typography_select".
+ */
+export interface TypographySelect<T extends boolean = true> {
+  name?: T;
+  fontFamily?: T;
+  displayName?: T;
+  category?: T;
+  usage?: T;
+  fontFiles?:
+    | T
+    | {
+        woff2?: T;
+        woff?: T;
+        ttf?: T;
+      };
+  webSafeFallbacks?: T;
+  fontWeights?:
+    | T
+    | {
+        weight?: T;
+        name?: T;
+        isDefault?: T;
+        id?: T;
+      };
+  emailSettings?:
+    | T
+    | {
+        lineHeight?: T;
+        letterSpacing?: T;
+        emailFallback?: T;
+      };
+  isActive?: T;
+  notes?: T;
   updatedAt?: T;
   createdAt?: T;
 }
