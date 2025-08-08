@@ -5,7 +5,7 @@ const EmailSettings: CollectionConfig = {
   slug: 'email-settings',
   admin: {
     useAsTitle: 'providerName',
-    group: 'Settings',
+    group: 'Communication',
   },
   access: ACCESS_PRESETS.settings,
   fields: [

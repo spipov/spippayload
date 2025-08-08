@@ -4,7 +4,7 @@ export const EmailLayouts: CollectionConfig = {
   slug: "email-layouts",
   admin: {
     useAsTitle: "name",
-    group: "Settings",
+    group: "Communication",
     description: "Manage email header and footer layouts",
     defaultColumns: ["name", "description", "isDefault", "isActive"],
   },

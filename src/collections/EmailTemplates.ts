@@ -4,7 +4,7 @@ export const EmailTemplates: CollectionConfig = {
   slug: "email-templates",
   admin: {
     useAsTitle: "name",
-    group: "Settings",
+    group: "Communication",
     description: "Manage email templates with variables and branding",
   },
   access: {
